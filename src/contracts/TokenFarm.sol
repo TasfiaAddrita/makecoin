@@ -22,7 +22,6 @@ contract TokenFarm {
 
     // Stakes Tokens (Deposit)
     function stakeTokens(uint _amount) public {
-
         // Require _amount be greater than 0
         require(_amount > 0, "amount can not be 0");
 
@@ -45,7 +44,7 @@ contract TokenFarm {
     // Issuing Tokens (Owner calls this function to set up interest) ??? 
     // Convert DAI tokens to Dapp tokens
     function issueTokens() public {
-
+        // Ensure only owner is using this function 
         require(msg.sender == owner, "Only owner can call this function");
 
         // Issue tokens to all stakers
@@ -60,6 +59,23 @@ contract TokenFarm {
     }
     
     // Unstaking Tokens (Withdraw)
+    function unstakeTokens() public {
+        // Fetch staking balance
+        uint balance = stakingBalance[msg.sender];
+
+        // Require balance be greater than 0
+        require(balance > 0, "balance can not be 0");
+
+        // Transfer Mock DAI tokens to this contract for staking
+        daiToken.transfer(msg.sender, balance);
+        
+        // Reset staking balance
+        stakingBalance[msg.sender] = 0;
+
+        // Update staking status
+        isStaking[msg.sender] = false;
+
+    }
 
     
 }
