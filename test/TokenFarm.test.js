@@ -106,7 +106,7 @@ contract("TokenFarm", ([owner, investor]) => {
             result = await tokenFarm.stakingBalance(investor)
             assert.equal(result.toString(), tokens("0"), "Investor staking  balance is not correct after staking")
 
-            result = await tokenFarm.isStaking(investor)
+            result = await tokenFarm.isStaking (investor)
             assert.equal(result.toString(), "false", "Investor staking status is not correct after staking")
 
         })
