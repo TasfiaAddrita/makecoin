@@ -48,12 +48,12 @@ contract TokenFarm {
 
         require(msg.sender == owner, "Only owner can call this function");
 
-        // Isuee tokens to all stakers
+        // Issue tokens to all stakers
         for (uint i = 0; i < stakers.length; i++) {
             address recipient = stakers[i];
-            uint balance = stakingBalance[recipient]
+            uint balance = stakingBalance[recipient];
             if (balance > 0) {
-                dappToken.transfer(recipient, balance)
+                dappToken.transfer(recipient, balance);
             }
             
         }
