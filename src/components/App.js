@@ -2,6 +2,9 @@ import React, { Component } from 'react'
 import Navbar from './Navbar'
 import './App.css'
 import Web3 from 'web3'
+import DaiToken from "../abis/DaiToken.json"
+import DappToken from "../abis/DappToken.json"
+import TokenFarm from "../abis/TokenFarm.json"
 
 class App extends Component {
 
@@ -15,6 +18,44 @@ class App extends Component {
 
     const accounts = await web3.eth.getAccounts()
     this.setState({ account: accounts[0] })
+
+    const networkId = await web3.eth.net.getId()
+
+    const daiTokenData = await DaiToken.networks[networkId]
+    if (daiTokenData) {
+      const daiToken = new web3.eth.Contract(DaiToken.abi, daiTokenData.address)
+      this.setState({ daiToken })
+      let daiTokenBalance = await daiToken.methods.balanceOf(this.state.account).call()
+      this.setState({ daiTokenBalance: daiTokenBalance.toString() })
+    }
+    else {
+      window.alert("DAI Token contract not deployed to detected network.")
+    }
+
+    const dappTokenData = await DappToken.networks[networkId]
+    if (dappTokenData) {
+      const dappToken = new web3.eth.Contract(DappToken.abi, dappTokenData.address)
+      this.setState({ dappToken })
+      let dappTokenBalance = await dappToken.methods.balanceOf(this.state.account).call()
+      this.setState({ dappTokenBalance: dappTokenBalance.toString() })
+    }
+    else {
+      window.alert("DAI Token contract not deployed to detected network.")
+    }
+
+    const tokenFarmData = await TokenFarm.networks[networkId]
+    if (tokenFarmData) {
+      const tokenFarm = new web3.eth.Contract(TokenFarm.abi, tokenFarmData.address)
+      this.setState({ tokenFarm })
+      let stakingBalance = await tokenFarm.methods.stakingBalance(this.state.account).call()
+      this.setState({ stakingBalance: stakingBalance.toString() })
+    }
+    else {
+      window.alert("Token Farm contract not deployed to detected network.")
+    }
+    
+    this.setState({ loading: false })
+
   }
 
   async loadWeb3() {
@@ -34,7 +75,14 @@ class App extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      account: '0x0'
+      account: '0x0',
+      daiToken: {},
+      dappToken: {},
+      tokenFarm: {},
+      daiTokenBalance: "0",
+      dappTokenBalance: "0",
+      stakingBalance: "0",
+      loading: true
     }
   }
 
