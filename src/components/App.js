@@ -5,6 +5,7 @@ import Web3 from 'web3'
 import DaiToken from "../abis/DaiToken.json"
 import DappToken from "../abis/DappToken.json"
 import TokenFarm from "../abis/TokenFarm.json"
+import Main from './Main'
 
 class App extends Component {
 
@@ -87,6 +88,21 @@ class App extends Component {
   }
 
   render() {
+
+    let content
+    if (this.state.loading) {
+      content = <p id="loader" className="text-center">Loading...</p>
+    }
+    else {
+      content = <Main 
+        daiTokenBalance={this.state.daiTokenBalance}
+        dappTokenBalance={this.state.dappTokenBalance}
+        stakingBalance={this.state.stakingBalance}
+        // stateTokens={this.stakeTokens}
+        // unstakeTokens={this.unstakeTokens}
+      />
+    }
+
     return (
       <div>
         <Navbar account={this.state.account} />
@@ -101,7 +117,7 @@ class App extends Component {
                 >
                 </a>
 
-                <h1>Hello, World!</h1>
+                {content}
 
               </div>
             </main>
