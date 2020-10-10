@@ -24,7 +24,15 @@ class Main extends Component {
 
         <div className="card mb-4">
           <div className="card-body">
-            <form className="mb-3">
+            <form className="mb-3" onSubmit={ (event) => {
+              event.preventDefault()
+              let amount
+              amount = this.input.value.toString()
+              amount = window.web3.utils.toWei(amount, "Ether")
+              this.props.stakeTokens(amount)
+            }
+
+            }>
               <div>
                 <label className="float-left"><b>Stake Tokens</b></label>
                 <span className="float-right text-muted">
@@ -32,7 +40,7 @@ class Main extends Component {
                 </span>
               </div>
               <div className="input-group mb-4">
-                <input type="text" className="form-control form-control-lg" placeholder="0" required />
+                <input type="text" ref={(input) => {this.input = input}} className="form-control form-control-lg" placeholder="0" required />
                 <div className="input-group-append">
                   <div className="input-group-text">
                     <img src={dai} height="32" alt=""/>
@@ -42,6 +50,10 @@ class Main extends Component {
               </div>
               <button type="submit" className="btn btn-primary btn-block btn-lg">STAKE!</button>
             </form>
+            <button className="btn btn-link btn-block btn-small" onClick={ (event) => {
+              event.preventDefault()
+              this.props.unstakeTokens()
+            }}>UN-STAKE...</button>
           </div>
         </div>
 
